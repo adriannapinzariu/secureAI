@@ -3,13 +3,29 @@ from werkzeug.utils import secure_filename
 import os
 import requests
 import sys
+from image_matching.clip_embeddings import CLIPModelPinecone
 
 app = Flask(__name__)
+model = CLIPModelPinecone()
 
 # Configure the upload folder and allowed file extensions
 app.config['UPLOAD_FOLDER'] = './uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'png'}
 
+
+@app.route('/get_top_images', methods=['POST'])
+def get_top_images():
+    data = request.get_json()
+    query = data.get('query')
+    top_k = data.get('top_k', 5)
+    search_criterion = data.get('search_criterion', 'text')
+
+    try:
+        result = model.get_top_N_images(query, top_k, search_criterion)
+        return jsonify(result)
+    except Exception as e:
+        return str(e), 400
+        
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
@@ -41,4 +57,4 @@ def upload_file():
         return 'File uploaded successfully', 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
