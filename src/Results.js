@@ -49,7 +49,7 @@ const Results = () => {
         </div>
       </div>
 
-      <div className="right-section">
+      <div className={`right-section ${analyzed ? 'red-text' : ''}`}>
         {analyzed ? (
           <div>
             <p className="subtitle">Here are the Results...</p>
