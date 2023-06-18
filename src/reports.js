@@ -4,6 +4,7 @@ import "./App.css";
 const Reports = () => {
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
+  const [percentage, setPercentage] = useState(null);
 
   const handleAddressChange = (event) => {
     setAddress(event.target.value);
@@ -20,12 +21,26 @@ const Reports = () => {
     console.log(addressValue)
     console.log(descriptionValue)
 
-    // Perform any additional actions with the stored data, such as generating a report
+    // Send a POST request to the Flask server
+    fetch('http://localhost:5000/run-model', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        address: addressValue,
+        description: descriptionValue
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      // The model's output is in the `percentage` field of the response
+      setPercentage(data.percentage);
+    });
 
     // Reset the input fields after storing the values
     setAddress('');
     setDescription('');
-
   };
 
   return (
@@ -52,9 +67,9 @@ const Reports = () => {
           Download Report
         </button>
       </div>
+      {percentage && <div className="percentage-container">Model output: {percentage}%</div>}
     </div>
   );
 };
-
 
 export default Reports;
