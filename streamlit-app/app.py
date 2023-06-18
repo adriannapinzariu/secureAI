@@ -1,17 +1,11 @@
-import streamlit as st
 import tensorflow as tf
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate
 from tensorflow.keras.models import Model
 import numpy as np
 import os
-
-def main():
-    st.title("Hello, World!")
-    st.write("Welcome to my Streamlit app.")
-    st.write("This is a basic example.")
-
-if __name__ == '__main__':
-    main()
+import requests
+from bs4 import BeautifulSoup
+import urllib
 
 def create_autoencoder(input_shape):
     # Encoder
@@ -35,8 +29,7 @@ def create_autoencoder(input_shape):
     model = Model(inputs, outputs)
     return model
 
-
-def detect_outliers(image_dataset, threshold):
+def train_autoencoder(image_dataset):
     # Preprocess the image dataset
     image_dataset = image_dataset.astype('float32') / 255.0
 
@@ -48,6 +41,9 @@ def detect_outliers(image_dataset, threshold):
     # Train the autoencoder
     autoencoder.fit(image_dataset, image_dataset, epochs=10, batch_size=32, verbose=1)
 
+    return autoencoder
+
+def detect_outliers(autoencoder, image_dataset, threshold):
     # Use the trained autoencoder to reconstruct images
     reconstructed_images = autoencoder.predict(image_dataset)
 
@@ -59,22 +55,78 @@ def detect_outliers(image_dataset, threshold):
 
     return outliers
 
+def process_image(autoencoder, img):
+     # Preprocess the image
+    img = img.astype('float32') / 255.0
+    img = np.expand_dims(img, axis=0)
+
+    # Use the trained autoencoder to reconstruct the image
+    reconstructed_img = autoencoder.predict(img)
+
+    # Compute the mean squared error (MSE) between the original and reconstructed image
+    mse = np.mean(np.square(img - reconstructed_img))
+
+    return mse
 
 def main():
-    st.title("Image Outlier Detection")
+    print("Image Outlier Detection")
+    url = 'https://www.hotels.com'
+    response = requests.get(url)
+    if response.status_code == 200:
+        content = response.content
+        soup = BeautifulSoup(content, 'html.parser')
+        img_tags = soup.find_all('img')
+        img_urls = [img['src'] for img in img_tags if 'src' in img.attrs]
 
-    # Set the path to the image dataset directory
-    dataset_dir = '/content/drive/MyDrive/test_imgs'
+        print(f"Found {len(img_urls)} image URLs")
 
-    # Set the threshold value for outlier detection
-    threshold = 0.04
+        # Load the image dataset from scraped URLs
+        image_dataset = []
+        for i, img_url in enumerate(img_urls):
+            try:
+                print(f"Downloading image {i}")
+                # Download the image
+                img_data = requests.get(img_url).content
 
-    # Load the image dataset
-    image_dataset = []
-    for filename in os.listdir(dataset_dir):
-        if filename.endswith('.jpg') or filename.endswith('.png'):
-            img_path = os.path.join(dataset_dir, filename)
-            img = tf.keras.preprocessing.image.load_img(img_path, target_size=(256, 256))
-            img = tf.keras.preprocessing.image.img_to_array(img)
-            image_dataset.append(img)
-    image_dataset = np
+                # Save the image
+                img_filename = f'image_{i}.jpg'
+                with open(img_filename, 'wb') as handler:
+                    handler.write(img_data)
+
+                print(f"Saved {img_filename}")
+
+                # Load the image with tensorflow
+                img = tf.keras.preprocessing.image.load_img(img_filename, target_size=(256, 256))
+                img = tf.keras.preprocessing.image.img_to_array(img)
+                image_dataset.append(img)
+            except Exception as e:
+                print(f"Unable to download or process image_{i}. Error: {e}")
+
+        # Convert the list to numpy array
+        image_dataset = np.array(image_dataset)
+
+        # Preprocess the image dataset
+        image_dataset = image_dataset.astype('float32') / 255.0
+
+        # Train the autoencoder
+        autoencoder = train_autoencoder(image_dataset)
+
+        # Process all images and calculate MSE for each
+        mse_values = []
+        for i, img in enumerate(image_dataset):
+            mse = process_image(autoencoder, img)
+            mse_values.append(mse)
+            print(f"MSE for image {i}: {mse}")
+
+        # Analyze MSE values to detect outliers
+        # This is a simple example, you can use more sophisticated methods
+        threshold = 0.04
+        outliers = [i for i, mse in enumerate(mse_values) if mse > threshold]
+        print(f"Number of outlier images detected: {len(outliers)}")
+
+    else:
+        print(f"Failed to send GET request to {url}. Status code: {response.status_code}")
+
+
+if __name__ == '__main__':
+    main()
