@@ -1,4 +1,3 @@
-
 import tensorflow as tf
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate
 from tensorflow.keras.models import Model
@@ -30,8 +29,7 @@ def create_autoencoder(input_shape):
     model = Model(inputs, outputs)
     return model
 
-
-def detect_outliers(image_dataset, threshold):
+def train_autoencoder(image_dataset):
     # Preprocess the image dataset
     image_dataset = image_dataset.astype('float32') / 255.0
 
@@ -43,6 +41,9 @@ def detect_outliers(image_dataset, threshold):
     # Train the autoencoder
     autoencoder.fit(image_dataset, image_dataset, epochs=10, batch_size=32, verbose=1)
 
+    return autoencoder
+
+def detect_outliers(autoencoder, image_dataset, threshold):
     # Use the trained autoencoder to reconstruct images
     reconstructed_images = autoencoder.predict(image_dataset)
 
@@ -53,6 +54,19 @@ def detect_outliers(image_dataset, threshold):
     outliers = np.where(mse > threshold)[0]
 
     return outliers
+
+def process_image(autoencoder, img):
+     # Preprocess the image
+    img = img.astype('float32') / 255.0
+    img = np.expand_dims(img, axis=0)
+
+    # Use the trained autoencoder to reconstruct the image
+    reconstructed_img = autoencoder.predict(img)
+
+    # Compute the mean squared error (MSE) between the original and reconstructed image
+    mse = np.mean(np.square(img - reconstructed_img))
+
+    return mse
 
 def main():
     print("Image Outlier Detection")
@@ -94,16 +108,26 @@ def main():
         # Preprocess the image dataset
         image_dataset = image_dataset.astype('float32') / 255.0
 
+        # Train the autoencoder
+        autoencoder = train_autoencoder(image_dataset)
+
         # Set the threshold value for outlier detection
         threshold = 0.04
 
         # Detect outliers
-        outliers = detect_outliers(image_dataset, threshold)
+        outliers = detect_outliers(autoencoder, image_dataset, threshold)
 
         # Display the number of outliers detected
         print(f"Number of outlier images detected: {len(outliers)}")
+
+        # Now you can use the process_image function to process individual images
+        # For example, let's process the first image in the dataset
+        mse = process_image(autoencoder, image_dataset[0])
+        print(f"MSE for the first image: {mse}")
+
     else:
         print(f"Failed to send GET request to {url}. Status code: {response.status_code}")
+
 
 
 if __name__ == '__main__':
