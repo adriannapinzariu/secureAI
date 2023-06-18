@@ -44,7 +44,7 @@ const Results = () => {
       </div>
 
       <div className="right-section">
-        <p className="subtitle">Using our (describe the model), we will find the closet match to your hotel room and let you know if it has been flagged for human trafficking.</p>  
+        <p className="subtitle">Leveraging modern visual tools, we will find the closet match to your hotel room and let you know if it has been flagged for human trafficking.</p>  
         <p className="subtitle">Upload an image to begin.</p>  
       </div>
     </div>
