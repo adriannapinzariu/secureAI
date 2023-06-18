@@ -137,7 +137,8 @@
 .upload-container {
   display: flex;
   padding-bottom: 30px;
-  align-items: center;
+  /* align-items: center; */
+  justify-content: left;
 }
 
 .upload-button {
@@ -147,11 +148,12 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 15px;
   color: #333;
   padding:1em;
   position:relative;
   box-shadow: 5px 5px 5px rgb(32, 32, 32);
+  margin-right: 120px;
 }
 
 .analyze-button {
@@ -161,9 +163,72 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 15px;
   color: #333;
   padding:1em;
   position:relative;
+  box-shadow: 5px 5px 5px rgb(32, 32, 32);
+  margin-right: 20px;
+  margin-left: 10px;
+  background-color: #7c7c7c;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.results-left-section {
+  display: flex;
+}
+
+
+/* Reports page styles */ 
+.reports-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  height: 100vh;
+  background-color: #2C2B2B;
+  color: white;
+}
+
+.input-container {
+  width: 100 px;
+  height: 100 px;
+  margin-bottom: 20px;
+  align-items: center;
+  
+}
+
+.address-label {
+  font-weight: bold;
+
+  
+}
+
+input,
+textarea {
+  width: 300px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.download-report-button {
+  padding: 10px 20px;
+  background-color: #7c7c7c;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 250px; /* setting as a fized size */
+  height: 50px;
+  box-shadow: 5px 5px 5px rgb(32, 32, 32);
+}
+
+.download-report-button:hover {
+  background-color: #ffffff;
+  color: black;
   box-shadow: 5px 5px 5px rgb(32, 32, 32);
 }
