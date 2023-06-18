@@ -7,7 +7,6 @@ import Reports from './reports';
 
 
 const App = () => {
-  const {data, setData} = useState();
 
   const handleClick = async () => {
     try {
