@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./App.css";
+import { Outlet } from 'react-router-dom';
 
 
 //Build a carousel component for the image 
@@ -9,7 +10,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleStartClick = () => {
-    navigate('/home');
+    navigate('/results');
   };
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -43,7 +44,9 @@ const Home = () => {
         <h1 className="title">SecureAI</h1>
         <p className="subtitle">Verify your surroundings with SecureAI, an advanced tool that analyzes images to detect potential signs of exploitation and aid in the identification of human trafficking cases.</p>
         <button className="start-button" onClick={handleStartClick} >Get Started</button>
+        
       </div>
+      <Outlet />
     </div>
   );
 };
