@@ -29,29 +29,29 @@ const Reports = () => {
   };
 
   return (
-    <div className="reports-container">
-      <div className="input-container">
-        <label htmlFor="address">Address:</label>
-        <input
-          type="text"
-          id="address"
-          value={address}
-          onChange={handleAddressChange}
-        />
-      </div>
-      <div className="input-container">
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={handleDescriptionChange}
-        ></textarea>
-      </div>
-      <div className="input-container">
-        <button className="download-report-button" onClick={handleDownloadReport}>
-          Download Report
-        </button>
-      </div>
+    <div className="reports-container">  
+        <div className="input-container">
+          <label htmlFor="address">Address:</label>
+          <input
+            type="text"
+            id="address"
+            value={address}
+            onChange={handleAddressChange}
+          />
+        </div>
+        <div className="input-container">
+          <label htmlFor="description">Description:</label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={handleDescriptionChange}
+          ></textarea>
+        </div>
+        <div className="input-container">
+          <button className="download-report-button" onClick={handleDownloadReport}>
+            Download Report
+          </button>
+        </div>
     </div>
   );
 };
