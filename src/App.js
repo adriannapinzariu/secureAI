@@ -7,6 +7,20 @@ import Reports from './reports';
 
 
 const App = () => {
+  const handleClick = async () => {
+    try {
+      const response = await fetch('/api/run_model');
+      if (response.ok) {
+        // The Streamlit app has finished running, and the index.html is returned
+        const html = await response.text();
+        document.open();
+        document.write(html);
+        document.close();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <Router>
       <div>
@@ -17,8 +31,12 @@ const App = () => {
           <Route path="reports" element={<Reports/>} />
         </Routes>
       </div>
+      <div>
+      <button onClick={handleClick}>Run Streamlit App</button>
+    </div>
     </Router>
   );
+  
 };
 
 export default App;
