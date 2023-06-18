@@ -20,7 +20,38 @@ const Reports = () => {
     console.log(addressValue)
     console.log(descriptionValue)
 
-    // Perform any additional actions with the stored data, such as generating a report
+
+    // Perform any additional actions with the stored data,  generating a report
+    const filename = 'report1.pdf';
+    const repoUrl = 'https://github.com/adriannapinzariu/secureAI';
+    const fileUrl = `${repoUrl}/raw/main/public/${filename}`;
+
+  // Create a temporary anchor element
+  const a = document.createElement('a');
+  a.href = fileUrl;
+  a.download = filename;
+
+   // Fetch the report file from the GitHub repository
+   fetch('https://api.github.com/repos/adriannapinzariu/secureAI/contents/public/report1.pdf')
+   .then((response) => response.json())
+   .then((data) => {
+     // Extract the download URL from the API response
+     const downloadUrl = data.download_url;
+     if (downloadUrl) {
+       // Create a temporary anchor element
+       const a = document.createElement('a');
+       a.href = downloadUrl;
+       a.download = 'report1.pdf';
+
+       // Programmatically trigger the download
+       a.click();
+     } else {
+       console.log('Failed to fetch download URL.');
+     }
+   })
+   .catch((error) => {
+     console.log('An error occurred while fetching the file:', error);
+   });
 
     // Reset the input fields after storing the values
     setAddress('');
