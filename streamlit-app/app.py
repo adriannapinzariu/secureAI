@@ -121,9 +121,19 @@ def main():
         # Analyze MSE values to detect outliers
         # This is a simple example, you can use more sophisticated methods
         threshold = 0.04
-        outliers = [i for i, mse in enumerate(mse_values) if mse > threshold]
+        # Detect outliers
+        outliers = detect_outliers(autoencoder, image_dataset, threshold)
         print(f"Number of outlier images detected: {len(outliers)}")
 
+        # Make a directory to save the outlier images
+        os.makedirs('outliers', exist_ok=True)
+
+        # Save the outlier images
+        for i in outliers:
+            outlier_img = image_dataset[i]
+            outlier_img_filename = f'outliers/outlier_{i}.jpg'
+            tf.keras.preprocessing.image.save_img(outlier_img_filename, outlier_img)
+            print(f"Saved outlier image to {outlier_img_filename}")
     else:
         print(f"Failed to send GET request to {url}. Status code: {response.status_code}")
 
