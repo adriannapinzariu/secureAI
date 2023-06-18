@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './Navbar';
 import Home from './Home';
@@ -6,8 +6,8 @@ import Results from './Results';
 import Reports from './reports';
 
 
-
 const App = () => {
+
   const handleClick = async () => {
     try {
       const response = await fetch('/api/run_model');

@@ -7,7 +7,31 @@ import requests
 from bs4 import BeautifulSoup
 import urllib
 import openai
+from transformers import pipeline
+
 openai.api_key = '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'
+
+def analyze_sentiment(review):
+    # Initialize the sentiment analysis pipeline
+    sentiment_analyzer = pipeline('sentiment-analysis')
+
+    # Analyze the sentiment of the review
+    result = sentiment_analyzer(review)[0]
+    
+    # result is a dictionary with 'label' and 'score' keys. 'label' could be 'POSITIVE' or 'NEGATIVE', and 'score' is a float
+    return result
+
+def analyze_reviews(reviews):
+    # reviews should be a list of strings, where each string is a review text
+    negative_reviews = []
+
+    for review in reviews:
+        sentiment = analyze_sentiment(review)
+
+        if sentiment['label'] == 'NEGATIVE' and sentiment['score'] > 0.5:  # You can adjust the threshold as needed
+            negative_reviews.append(review)
+
+    return negative_reviews
 
 def create_autoencoder(input_shape):
     # Encoder
@@ -155,6 +179,19 @@ def main():
         # Detect outliers
         outliers = detect_outliers(autoencoder, image_dataset, threshold)
         print(f"Number of outlier images detected: {len(outliers)}")
+
+        # Extract reviews
+        review_tags = soup.find_all('div', {'class': 'review'})  # Replace with appropriate tag and class name
+        reviews = [review.get_text() for review in review_tags]
+
+        print(f"Found {len(reviews)} reviews")
+
+        # Analyze reviews
+        negative_reviews = analyze_reviews(reviews)
+        print(f"Found {len(negative_reviews)} negative reviews")
+        
+        for review in negative_reviews:
+            print(review)
 
         # Analyze outliers with OpenAI GPT-3
         assistant_response = analyze_outliers_with_openai(outliers, img_alts)
