@@ -21,37 +21,19 @@ const Reports = () => {
     console.log(descriptionValue)
 
 
-    // Perform any additional actions with the stored data,  generating a report
-    const filename = 'report1.pdf';
-    const repoUrl = 'https://github.com/adriannapinzariu/secureAI';
-    const fileUrl = `${repoUrl}/raw/main/public/${filename}`;
+    // Extract the file ID from the Google Docs URL
+    const fileId = "1KHygWcpdiqNOZsFbtXVia1VSkzVlPYqNrlQ2XgWMRSU";
 
-  // Create a temporary anchor element
-  const a = document.createElement('a');
-  a.href = fileUrl;
-  a.download = filename;
+    // Create the download URL using the file ID
+    const downloadUrl = `https://docs.google.com/document/export?format=pdf&id=${fileId}`;
 
-   // Fetch the report file from the GitHub repository
-   fetch('https://api.github.com/repos/adriannapinzariu/secureAI/contents/public/report1.pdf')
-   .then((response) => response.json())
-   .then((data) => {
-     // Extract the download URL from the API response
-     const downloadUrl = data.download_url;
-     if (downloadUrl) {
-       // Create a temporary anchor element
-       const a = document.createElement('a');
-       a.href = downloadUrl;
-       a.download = 'report1.pdf';
+    // Create a temporary anchor element
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.click();
 
-       // Programmatically trigger the download
-       a.click();
-     } else {
-       console.log('Failed to fetch download URL.');
-     }
-   })
-   .catch((error) => {
-     console.log('An error occurred while fetching the file:', error);
-   });
 
     // Reset the input fields after storing the values
     setAddress('');
