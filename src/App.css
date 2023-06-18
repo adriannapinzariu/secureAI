@@ -106,7 +106,7 @@
 
 /* Results Page Styles */
 
-.results-container {
+/* .results-container {
   background-color: #2C2B2B;
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -114,15 +114,15 @@
   justify-items: center;
   align-items: center;
   height: 100vh;
-}
+} */
 
 .image-container {
-  margin-bottom: px;
+  padding-bottom: 30px;
 }
 
 .uploaded-image {
-  width: 625px;
-  height: 400px;
+  width: 525px;
+  height: 350px;
   object-fit: cover;
   border-radius: 10px;
   box-shadow: 5px 5px 5px rgb(32, 32, 32);
