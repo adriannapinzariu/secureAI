@@ -18,3 +18,5 @@ if response.status_code == 200:
     img_urls = [img['src'] for img in img_tags if 'src' in img.attrs]
 
     print(f"Found {len(img_urls)} image URLs")
+
+    
