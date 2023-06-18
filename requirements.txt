@@ -8,4 +8,3 @@ scipy
 ipython
 jupyterlab
 ipywidgets
-streamlit
