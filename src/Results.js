@@ -35,7 +35,7 @@ const Results = () => {
 
   return (
     <div className="container">
-      <div className="left-section">
+      <div className={`left-section ${analyzed ? 'red-background' : ''}`}>
         <div className="image-container">
           {uploadedImage ? (
             <img className="uploaded-image" src={uploadedImage} alt="Uploaded" />
@@ -49,7 +49,7 @@ const Results = () => {
         </div>
       </div>
 
-      <div className={`right-section ${analyzed ? 'red-text' : ''}`}>
+      <div className="right-section">
         {analyzed ? (
           <div>
             <p className="subtitle">Here are the Results...</p>
@@ -69,3 +69,4 @@ const Results = () => {
 };
 
 export default Results;
+
