@@ -7,7 +7,7 @@ import os
 
 def main():
     st.title("Hello, World!")
-    st.write("Welcome to my Streamlit app.")
+    st.write("Welcome to my Streamlit app. We're going to create an api endpoint")
     st.write("This is a basic example.")
 
 if __name__ == '__main__':
