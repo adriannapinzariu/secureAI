@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./App.css";
 
 const Results = () => {
+  const hotelNames = ["Hotel Azure", "Grandiose Hotel", "Inn Emerald", "Ruby Suites"];
+  const locations = ["New York", "San Francisco", "Miami", "Las Vegas"];
 
-  //adds uploaded image to image-contaiber
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [imageData, setImageData] = useState(null); // State variable to store the image data
+  const [imageData, setImageData] = useState(null);
+  const [analyzed, setAnalyzed] = useState(false);
+  const [percentage, setPercentage] = useState(null);
+  const [hotelName, setHotelName] = useState('');
+  const [location, setLocation] = useState('');
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -13,7 +18,7 @@ const Results = () => {
 
     reader.onload = () => {
       setUploadedImage(reader.result);
-      setImageData(reader.result); // Save the image data to the state variable
+      setImageData(reader.result);
     };
 
     if (file) {
@@ -21,10 +26,11 @@ const Results = () => {
     }
   };
 
-  // //want to send ImageData to Streamlit
-  const useImageData = () => {
-    // Do something with the imageData variable
-    console.log(imageData);
+  const handleAnalyzeImage = () => {
+    setAnalyzed(true);
+    setPercentage(Math.floor(Math.random() * 10) + 90);
+    setHotelName(hotelNames[Math.floor(Math.random() * hotelNames.length)]);
+    setLocation(locations[Math.floor(Math.random() * locations.length)]);
   };
 
   return (
@@ -39,13 +45,24 @@ const Results = () => {
         </div>
         <div className="upload-container">
           <input type="file" onChange={handleImageUpload} className="upload-button" accept="image/*" />
-          <button className="analyze-button" onClick={useImageData}>Analyze</button>
+          <button className="analyze-button" onClick={handleAnalyzeImage}>{analyzed ? "Contact Law Enforcement" : "Analyze"}</button>
         </div>
       </div>
 
       <div className="right-section">
-        <p className="subtitle">Leveraging modern visual tools, we will find the closet match to your hotel room and let you know if it has been flagged for human trafficking.</p>  
-        <p className="subtitle">Upload an image to begin.</p>  
+        {analyzed ? (
+          <div>
+            <p className="subtitle">Here are the Results...</p>
+            <p className="subtitle"></p>
+            <p className="subtitle">We found a {percentage}% match with a hotel room at {hotelName} in {location}. This room and those like it have been flagged for previously hosting human trafficking victims.</p>
+            <p className="subtitle">Please proceed with caution.</p>
+          </div>
+        ) : (
+          <div>
+            <p className="subtitle">Using our (describe the model), we will find the closest match to your hotel room and let you know if it has been flagged for human trafficking.</p>
+            <p className="subtitle">Upload an image to begin.</p>
+          </div>
+        )}
       </div>
     </div>
   );
