@@ -80,7 +80,7 @@ def main():
 
         print(f"Found {len(img_urls)} image URLs")
 
-    # Load the image dataset from scraped URLs
+        # Load the image dataset from scraped URLs
         image_dataset = []
         for i, img_url in enumerate(img_urls):
             try:
@@ -111,23 +111,21 @@ def main():
         # Train the autoencoder
         autoencoder = train_autoencoder(image_dataset)
 
-        # Set the threshold value for outlier detection
+        # Process all images and calculate MSE for each
+        mse_values = []
+        for i, img in enumerate(image_dataset):
+            mse = process_image(autoencoder, img)
+            mse_values.append(mse)
+            print(f"MSE for image {i}: {mse}")
+
+        # Analyze MSE values to detect outliers
+        # This is a simple example, you can use more sophisticated methods
         threshold = 0.04
-
-        # Detect outliers
-        outliers = detect_outliers(autoencoder, image_dataset, threshold)
-
-        # Display the number of outliers detected
+        outliers = [i for i, mse in enumerate(mse_values) if mse > threshold]
         print(f"Number of outlier images detected: {len(outliers)}")
-
-        # Now you can use the process_image function to process individual images
-        # For example, let's process the first image in the dataset
-        mse = process_image(autoencoder, image_dataset[0])
-        print(f"MSE for the first image: {mse}")
 
     else:
         print(f"Failed to send GET request to {url}. Status code: {response.status_code}")
-
 
 
 if __name__ == '__main__':
