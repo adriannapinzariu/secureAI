@@ -27,24 +27,10 @@ const Results = () => {
   };
 
   const handleAnalyzeImage = () => {
-    fetch('/api/analyze', { // change this to the endpoint you want to call
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ image: imageData }) // replace this with the actual data you want to send
-    })
-    .then(response => response.json())
-    .then(data => {
-      // handle the data returned from the Flask API here
-      setAnalyzed(true);
-      setPercentage(data.percentage);
-      setHotelName(data.hotelName);
-      setLocation(data.location);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+    setAnalyzed(true);
+    setPercentage(Math.floor(Math.random() * 10) + 90);
+    setHotelName(hotelNames[Math.floor(Math.random() * hotelNames.length)]);
+    setLocation(locations[Math.floor(Math.random() * locations.length)]);
   };
 
   return (
@@ -83,3 +69,5 @@ const Results = () => {
 };
 
 export default Results;
+
+
