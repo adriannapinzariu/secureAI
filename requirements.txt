@@ -1,4 +1,4 @@
-numpy
+numpy<1.24,>=1.22
 matplotlib
 opencv-python
 tqdm
@@ -8,3 +8,4 @@ scipy
 ipython
 jupyterlab
 ipywidgets
+streamlit
