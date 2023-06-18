@@ -37,6 +37,7 @@ RUN pip install lancedb
 RUN pip install duckdb
 RUN pip install --quiet gradio transformers
 RUN pip install gdcm pydicom faiss-gpu pinecone-client scikit-image scikit-learn datasets
-
+RUN pip install pinecone-client
+RUN pip install Flask
 
 WORKDIR /usr/src/app
