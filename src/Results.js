@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "./App.css";
 
 const Results = () => {
@@ -26,12 +27,22 @@ const Results = () => {
     }
   };
 
+  const navigate = useNavigate();
+  const [analysisCompleted, setAnalysisCompleted] = useState(false);
+
   const handleAnalyzeImage = () => {
-    setAnalyzed(true);
-    setPercentage(Math.floor(Math.random() * 10) + 90);
-    setHotelName(hotelNames[Math.floor(Math.random() * hotelNames.length)]);
-    setLocation(locations[Math.floor(Math.random() * locations.length)]);
+    if (analysisCompleted) {
+      navigate('/reports');
+    } else {
+      setAnalyzed(true);
+      setPercentage(Math.floor(Math.random() * 10) + 90);
+      setHotelName(hotelNames[Math.floor(Math.random() * hotelNames.length)]);
+      setLocation(locations[Math.floor(Math.random() * locations.length)]);
+      setAnalysisCompleted(true);
+    }
   };
+  
+
 
   return (
     <div className="container">
